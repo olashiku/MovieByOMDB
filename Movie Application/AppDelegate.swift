@@ -7,14 +7,36 @@
 
 import UIKit
 import CoreData
+import Swinject
+import RxSwift
+
+
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    
+    var window: UIWindow?
 
+
+    let coordinator:AppCoordinator = Container.sharedContainer.resolve(AppCoordinator.self)!
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                appDelegate.window = self.window
+                coordinator.start()
+        
+        if #available(iOS 13, *) {
+                        // do only pure app launch stuff, not interface stuff
+                    } else {
+                        self.window = UIWindow()
+                        self.window!.rootViewController = coordinator.navigationController
+                        self.window!.makeKeyAndVisible()
+                    }
+
+        
         return true
     }
 
